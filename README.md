@@ -5,7 +5,6 @@
   Window Resizer
   <br>
 </h1>
-
 <h4 align="center">yawn</h4>
 
 <p align="center">
