@@ -1,0 +1,13 @@
+@font-face {
+	font-family: 'Lato-WR';
+	src: url('chrome-extension://__MSG_@@extension_id__/assets/fonts/lato-regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Lato-WR';
+	src: url('chrome-extension://__MSG_@@extension_id__/assets/fonts/lato-bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}

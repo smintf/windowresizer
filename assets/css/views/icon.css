@@ -1,0 +1,14 @@
+wr-icon {
+	display: inline-block;
+	box-sizing: border-box;
+	width: 24px;
+	height: 24px;
+	max-width: 100%;
+	max-height: 100%;
+}
+
+wr-icon svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+}

@@ -1,0 +1,41 @@
+[
+	{
+		"url"     : null,
+		"action"  : "showProPage",
+		"image"   : null,
+		"icon"    : "#icon-thumbs-up",
+		"caption" : "Hey there! Do you enjoy using this extension?",
+		"accent"  : "#ff8a00",
+		"enabled" : true
+	},
+
+	{
+		"url"     : null,
+		"action"  : "showProPage",
+		"image"   : null,
+		"icon"    : "#icon-thumbs-up",
+		"caption" : "Do you like this extension? Show your support!",
+		"accent"  : "#ff8a00",
+		"enabled" : true
+	},
+
+	{
+		"url"     : null,
+		"action"  : "showProPage",
+		"image"   : null,
+		"icon"    : "#icon-cart",
+		"caption" : "Upgrade to Pro to remove these messages!",
+		"accent"  : "#ff8a00",
+		"enabled" : true
+	},
+
+	{
+		"url"     : null,
+		"action"  : "showProPage",
+		"image"   : null,
+		"icon"    : "#icon-trophy",
+		"caption" : "Support this extension by upgrading to Pro!",
+		"accent"  : "#ff8a00",
+		"enabled" : true
+	}
+]

@@ -1,0 +1,152 @@
+wr-preset {
+	display: block;
+}
+
+wr-preset > div {
+	position: relative;
+	box-sizing: border-box;
+	width: inherit;
+	height: 48px;
+	cursor: pointer;
+	padding: 8px 16px;
+	-webkit-user-select: none;
+	user-select: none;
+
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: stretch;
+
+}
+
+wr-preset .icon {
+	position: relative;
+	margin-right: 8px;
+	box-sizing: border-box;
+	width: 32px;
+	height: 32px;
+	padding: 4px;
+	background: #222;
+	fill: #fff;
+	border-radius: 2px;
+	flex: 0 0 auto;
+}
+
+wr-preset .content {
+	flex-grow: 2;
+	display: flex;
+	flex-flow: column nowrap;
+	/*align-items: stretch;*/
+	justify-content: space-around;
+	min-width: 0;
+}
+
+wr-preset .title {
+	order: -1;
+	color: #222;
+	height: 16px;
+	font-size: 16px;
+	line-height: 1em;
+	font-weight: bold;
+	letter-spacing: -1px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+wr-preset .title em {
+	color: #555;
+	letter-spacing: 0px;
+	font-weight: normal;
+	/*font-style: normal;*/
+}
+
+wr-preset .description {
+	color: #999;
+	height: 11px;
+	font-size: 11px;
+	line-height: 1em;
+	font-weight: normal;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+wr-preset .description:empty {
+	display: none;
+}
+
+wr-preset:hover > div {
+	background: #edf4d7;
+}
+
+wr-preset:hover .icon {
+	background: #347f2b;
+	fill: #fff;
+}
+
+wr-preset:hover .title {
+	color: #224b1e;
+}
+
+wr-preset:hover .description {
+	color: #224b1e;
+}
+
+.hide-presets-description wr-preset .description {
+	display: none;
+}
+
+[data-icons="clear"] wr-preset .icon {
+	background: transparent;
+	fill: #222;
+}
+
+[data-icons="clear"] wr-preset .content {
+	border-left: 1px solid rgba(0, 0, 0, .15);
+	padding-left: 12px;
+}
+
+[data-icons="clear"] wr-preset:hover .content {
+	border-color: #347f2b;
+}
+
+[data-icons="clear"] wr-preset:hover .icon {
+	background: transparent;
+	fill: #347f2b;
+}
+
+[data-preset-title="description"] wr-preset .description:not(:empty) + .title {
+	order: 1;
+	color: #999;
+	height: 11px;
+	font-size: 11px;
+	line-height: 1em;
+	font-weight: normal;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	letter-spacing: unset;
+	font-family: Lato;
+}
+
+[data-preset-title="description"] wr-preset .description {
+	color: #222;
+	height: 16px;
+	font-size: 16px;
+	line-height: 1em;
+	font-weight: bold;
+	letter-spacing: unset;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	font-family: 'Lato Light', sans;
+}
+
+.hide-presets-description[data-preset-title="description"] wr-preset .title {
+	display: none;
+}
+
+
+.hide-presets-description[data-preset-title="description"] wr-preset .description {
+	display: block;
+}

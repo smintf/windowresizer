@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Settings</title>
+		<link rel="stylesheet" type="text/css" href="../assets/css/settings.css" />
+	</head>
+	<body
+		rv-data-icons="presetsIconsStyle"
+		>
+		<div id="wrapper">
+			<div id="sidebar">
+				<nav>
+					<div id="pro-menu" rv-class-licensed="license">
+						<a rv-on-click="navigateTo" href="#pro">
+							<wr-icon src="#icon-trophy"></wr-icon>
+							<span>pro</span>
+						</a>
+					</div>
+					<a rv-each-item="menu" rv-on-click="navigateTo" rv-class-selected="item.selected" rv-href="item.id">{item.title}</a>
+				</nav>
+
+				<a href="https://windowresizer.userecho.com/" id="bugReportButton" target="_blank">
+					<wr-icon src="#icon-help"></wr-icon>
+					help &amp; support
+				</a>
+			</div>
+
+			<div id="content" class="visible">
+
+			</div>
+		</div>
+
+		<div class="WR_modal">
+			<div class="WR_modal_content">
+				<h3 class="WR_modal_title" rv-html="currentMessage.title"></h3>
+				<div class="WR_modal_message" rv-html="currentMessage.message"></div>
+				<div class="WR_modal_actions">
+					<button rv-each-action="currentMessage.actions" rv-on-click="action.handler" rv-class-main="action.main">{action.title}</button>
+				</div>
+			</div>
+		</div>
+
+		
+<template id="wr-icon">
+	<svg focusable="false" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 24 24">
+		<!-- use xlink:href=""></use -->
+	</svg>
+</template>
+
+<template id="wr-numeric-input">
+	<input type="text" rv-placeholder="placeholder" rv-maxlength="maxlength" rv-value="val" />
+</template>
+<template id="wr-preset">
+	<div>
+		<wr-icon class="icon" rv-src="preset.icon"></wr-icon>
+		<div class="content">
+			<div class="description" rv-html="preset.description"></div>
+			<div class="title" rv-html="preset.title"></div>
+		</div>
+		<content />
+	</div>
+</template>
+
+<template id="wr-status-toggle">
+	<input type="checkbox" rv-checked="ischecked" />
+	<div rv-on="on" rv-off="off"></div>
+</template>
+<template id="wr-tab-content">
+
+</template>
+<template id="wr-tab-group">
+	<span>xxx</span>
+</template>
+<template id="wr-page-edit-preset">
+	<h1>
+		<a rv-on-click="cancel" class="tool-btn" title="cancel" href="#"><wr-icon src="#icon-arrow-left" /></a>
+		{title}
+	</h1>
+
+	<ul rv-show="formErrors | ArrayNotEmpty" class="errors">
+		<li rv-each-error="formErrors" rv-html="error"></li>
+	</ul>
+
+	<form rv-on-submit="savePreset">
+		<div class="setting-group">
+			<div class="label small">Resize target</div>
+			<div class="input">
+				<label><input rv-checked="preset.target | ToInt" value="0" type="radio" name="resize-target" /> Window</label><br />
+				<label><input rv-checked="preset.target | ToInt" value="1" type="radio" name="resize-target" /> Viewport</label>
+			</div>
+		</div>
+
+		<div class="setting-group">
+			<div class="label small">Width &times Height</div>
+			<div class="input">
+				<input type="text" rv-value="preset.width | IntOrNull" class="centered" size="6" placeholder="width" />
+				&times;
+				<input type="text" rv-value="preset.height | IntOrNull" class="centered" size="6" placeholder="height" />
+
+				<em>(<a href="#" rv-on-click="useCurrentSize">use current</a>)</em>
+			</div>
+
+			<br /><br />
+			<div class="note">
+				"use current" takes into account the "Resize target" you have selected above.
+			</div>
+		</div>
+
+		<div class="setting-group">
+			<div class="label small">Icon</div>
+			<div class="input">
+				<label class="deviceIcon">
+					<input rv-checked="customIcon" type="radio" name="device-icon" value="3" />
+					<wr-icon src="#icon-desktop" />
+				</label>
+
+				<label class="deviceIcon">
+					<input rv-checked="customIcon" type="radio" name="device-icon" value="2" />
+					<wr-icon src="#icon-laptop" />
+				</label>
+
+				<label class="deviceIcon">
+					<input rv-checked="customIcon" type="radio" name="device-icon" value="1" />
+					<wr-icon src="#icon-tablet" />
+				</label>
+
+				<label class="deviceIcon">
+					<input rv-checked="customIcon" type="radio" name="device-icon" value="0" />
+					<wr-icon src="#icon-phone" />
+				</label>
+			</div>
+		</div>
+
+		<div class="setting-group">
+			<div class="label small">Description <span class="note">(optional)</span></div>
+			<div class="input">
+				<input type="text" rv-value="preset.description | Nullify" placeholder="(none)" size="40" />
+			</div>
+		</div>
+
+		<div class="setting-group">
+			<div class="label small">Position <span class="note">(optional)</span></div>
+
+			<div class="input">
+				<input type="text" rv-enabled="allowCustomPosition" rv-value="preset.left | IntAndNull" class="centered" size="6" placeholder="(left)" />
+				&times;
+				<input type="text" rv-enabled="allowCustomPosition" rv-value="preset.top | IntAndNull" class="centered" size="6" placeholder="(top)" />
+
+				<em>(<a href="#" rv-on-click="useCurrentPosition">use current</a>)</em>
+
+				<br /><br />
+
+				<label><input rv-checked="customPosition" value="0" type="radio" name="window-position" /> Leave unchanged</label><br />
+				<label><input rv-checked="customPosition" value="1" type="radio" name="window-position" /> Use custom position</label><br />
+				<label><input rv-checked="customPosition" value="2" type="radio" name="window-position" /> Center on screen</label>
+			</div>
+		</div>
+
+		<div class="stand-out stand-out--start">
+			<button type="submit" class="btn primary">save preset</button>
+		</div>
+	</form>
+</template>
+<template id="wr-page-help">
+	<section>
+		<h1>about</h1>
+
+		<div class="emphasis">Window Resizer</div>
+		<div class="note">
+			<span rv-text="friendlyVersion"></span>
+			<span rv-text="completeVersion"></span>
+		</div>
+		<div>
+			<!--<a href="https://chrome.google.com/webstore/detail/kkelicaakdanhinjdeammmilcgefonfh?utm_source=Chrome+Window+Resizer" target="_blank">Homepage</a>
+			|
+			<a href="https://chrome.google.com/webstore/detail/window-resizer/kkelicaakdanhinjdeammmilcgefonfh/reviews?utm_source=Chrome+Window+Resizer" target="_blank">Reviews</a>-->
+			<a rv-on-click="showReleaseNotes" href="#">What's new in this version?</a>
+			<div rv-show="debugLog">
+				<a rv-on-click="showDebugLog" href="#" style="color: #d42">Errors log</a>
+			</div>
+		</div>
+	</section>
+
+	<section>
+		<h1>credits</h1>
+
+		<ul>
+			<li>
+				<a href="http://rivetsjs.com/?utm_source=Chrome+Window+Resizer" target="_blank">Rivets.js</a>
+				- Lightweight and powerful data binding
+			</li>
+
+			<li>
+				<a href="http://www.latofonts.com/lato-free-fonts/?utm_source=Chrome+Window+Resizer" target="_blank">Lato Fonts</a>
+				- high-quality open-source font family
+			</li>
+
+			<li>
+				Device Orientation icon by
+				<a href="http://www.xgmedia.com/device-orientation-icon/?utm_source=Chrome+Window+Resizer" target="_blank">Avi Itzkovitch</a>
+			</li>
+
+			<li>
+				Pencil icon by
+				<a href="https://thenounproject.com/tinyxl/uploads/?i=17651&amp;utm_source=Chrome+Window+Resizer" target="_blank">Erin Standley</a>
+				(modified) - <a class="cc-license" href="http://creativecommons.org/licenses/by/3.0/us/" target="_blank">Creative Commons</a>
+			</li>
+
+			<li>
+				Gear icon by
+				<a href="https://thenounproject.com/lmf.rodrigues/uploads/?i=29772&amp;utm_source=Chrome+Window+Resizer" target="_blank">Luis Rodrigues</a>
+				(modified) - <a class="cc-license" href="http://creativecommons.org/licenses/by/3.0/us/" target="_blank">Creative Commons</a>
+			</li>
+
+			<li>
+				Help icon by
+				<a href="https://thenounproject.com/logan433/uploads/?i=926218&amp;utm_source=Chrome+Window+Resizer" target="_blank">logan</a>
+				- <a class="cc-license" href="http://creativecommons.org/licenses/by/3.0/us/" target="_blank">Creative Commons</a>
+			</li>
+
+			<li>
+				Thumbs up icon by
+				<a href="https://thenounproject.com/alex2900/uploads/?i=983475&amp;utm_source=Chrome+Window+Resizer" target="_blank">Alex Muravev</a>
+				- <a class="cc-license" href="http://creativecommons.org/licenses/by/3.0/us/" target="_blank">Creative Commons</a>
+			</li>
+
+			<li>
+				Trophy icon by
+				<a href="https://thenounproject.com/latyshevaoksana/uploads/?i=801112&amp;utm_source=Chrome+Window+Resizer" target="_blank">Oksana Latysheva</a>
+				- <a class="cc-license" href="http://creativecommons.org/licenses/by/3.0/us/" target="_blank">Creative Commons</a>
+			</li>
+
+			<li>
+				Shopping cart icon by
+				<a href="https://thenounproject.com/popup23/uploads/?i=2968&amp;utm_source=Chrome+Window+Resizer" target="_blank">Ulrich Pohl</a>
+				- <a class="cc-license" href="http://creativecommons.org/licenses/by/3.0/us/" target="_blank">Creative Commons</a>
+			</li>
+
+			<li>
+				Check mark icon by
+				<a href="https://thenounproject.com/il.capitano/uploads/?i=1105964&amp;utm_source=Chrome+Window+Resizer" target="_blank">il Capitano</a>
+				- <a class="cc-license" href="http://creativecommons.org/licenses/by/3.0/us/" target="_blank">Creative Commons</a>
+			</li>
+
+			<li>
+				Reset icon by
+				<a href="https://thenounproject.com/nimalraj/uploads/?i=237753&amp;utm_source=Chrome+Window+Resizer" target="_blank">Nimal Raj</a>
+				- <a class="cc-license" href="http://creativecommons.org/licenses/by/3.0/us/" target="_blank">Creative Commons</a>
+			</li>
+		</ul>
+	</section>
+</template>
+<template id="wr-page-hotkeys">
+	<nav class="tab-nav">
+		<a rv-on-click="parent.handleNavigateToTab" href="#tab-global-hotkeys">global</a>
+		<a rv-on-click="parent.handleNavigateToTab" href="#tab-popup-hotkeys">popup</a>
+	</nav>
+
+	<div id="tab-global-hotkeys" class="tab-view">
+		<p>
+			Please remember that the following commands only work on pages that were loaded using one of the
+			<code>http://</code>, <code>https://</code> or <code>file://</code> protocols.
+		</p>
+
+		<div class="stand-out stand-out--start">
+			<button rv-on-click="configureShortcuts" class="btn primary">configure the shortcuts</button>
+		</div>
+
+		<table>
+			<tr rv-each-cmd="globalShortcuts">
+				<td><code class="keyboard-shortcut">{cmd.shortcut | FriendlyCmdShortcut}</code></td>
+				<td>{cmd | FriendlyCmdDescription}</td>
+			</tr>
+		</table>
+	</div>
+
+	<div id="tab-popup-hotkeys" class="tab-view">
+		<p>
+			The popup contains two main areas: the "Presets &amp; Tools" area and the "Quick Resize" form. You can change focus between them using the
+			<code>Tab</code> or <code>Shift + Tab</code> keyboard shortcuts.
+		</p>
+		<p>
+			The "Presets &amp; Tools" area is focused by default. While this area has focus, you can also use the following shortcuts:
+		</p>
+
+		<table>
+			<tr>
+				<td><code class="keyboard-shortcut">Left / Right</code></td>
+				<td>Navigate left to right, between the presets and the tools sidebar</td>
+			</tr>
+
+			<tr>
+				<td><code class="keyboard-shortcut">Up / Down</code></td>
+				<td>Navigate up and down the presets list or the tools sidebar</td>
+			</tr>
+
+			<tr>
+				<td><code class="keyboard-shortcut">&lt;numeric keys&gt;</code></td>
+				<td>Use presets 1 to 10</td>
+			</tr>
+
+			<tr>
+				<td><code class="keyboard-shortcut">R</code></td>
+				<td>Rotate the viewport</td>
+			</tr>
+
+			<tr>
+				<td><code class="keyboard-shortcut">P</code></td>
+				<td>Open as popup</td>
+			</tr>
+
+			<tr>
+				<td><code class="keyboard-shortcut">T</code></td>
+				<td>Toggle the tooltip</td>
+			</tr>
+
+			<tr>
+				<td><code class="keyboard-shortcut">E</code></td>
+				<td>Open the presets edit dialog</td>
+			</tr>
+
+			<tr>
+				<td><code class="keyboard-shortcut">S</code></td>
+				<td>Show the general settings</td>
+			</tr>
+		</table>
+	</div>
+</template>
+<template id="wr-page-presets">
+	<h1 class="presets-page-title">
+		<span>presets</span>
+
+		<div class="presets-page-actions" rv-show="presets | ArrayNotEmpty">
+			<a rv-on-click="presetsDelete" class="tool-btn danger" data-title="remove all the presets" href="#"><wr-icon src="#icon-trash" /></a>
+			<a rv-on-click="presetsReset" class="tool-btn warning" data-title="reset presets to default" href="#"><wr-icon src="#icon-reset" /></a>
+			<a rv-on-click="presetAdd" class="tool-btn success" data-title="create a new preset" href="#"><wr-icon src="#icon-add" /></a>
+		</div>
+	</h1>
+
+	<div rv-hide="presets | ArrayNotEmpty">
+		<p class="hero">
+			It seems that you don't have any presets, which makes this extension rather useless, doesn't it? :)
+		</p>
+
+		<div class="stand-out">
+			<p class="emphasis">
+				Why don't you
+			</p>
+
+			<button style="width: 180px;" rv-on-click="presetAdd" class="btn primary">add a new preset</button>
+			or
+			<button style="width: 180px;" rv-on-click="presetsReset" class="btn">use the default presets</button>
+		</div>
+	</div>
+
+	<div rv-show="presets | ArrayNotEmpty">
+		<p>
+			Drag the presets to re-order, hover for options or add a new one
+			by clicking on the &quot;+&quot; button at the top of the screen.
+		</p>
+
+		<div id="presetsSortList">
+			<div rv-each-item="presets" class="preset-item">
+				<wr-preset preset="item"></wr-preset>
+				<div class="preset-actions">
+					<a rv-on-click="presetEdit" class="edit tool-btn" title="edit" href="#"><wr-icon src="#icon-edit" /></a>
+					<a rv-on-click="presetDelete" class="delete tool-btn" title="delete" href="#"><wr-icon src="#icon-trash" /></a>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+<template id="wr-page-pro">
+	<div class="loading" rv-show="busy"></div>
+	<h1>pro</h1>
+
+	<div rv-show="parent.license">
+		<div id="pro-splash">
+			<wr-icon src="#icon-trophy"></wr-icon>
+			<br />
+			You are a Pro user. Thank you for your support!<br /><br />
+			<strong>License key:</strong> {parent.license.key}<br />
+			<strong>Purchased on:</strong> {parent.license.date | FriendlyDate}<br />
+		</div>
+	</div>
+
+	<div rv-hide="parent.license">
+		<p>
+			If you find this extension useful, you can now show your appreciation by purchasing a "Pro" license.
+			The "Pro" license is just a way for people to support further development of this extension (just like a donation, but, this way, you also get an invoice),
+			with the only tangible benefit that it permanently removes the promo message displayed in the extension's popup.
+		</p>
+
+		<div rv-show="error" class="errors">{error}</div>
+
+		<div id="pro-forms">
+			<div id="pro-checkout">
+				<h2>purchase</h2>
+				<p>
+					Pay what you want (recommended ${defaultPrice}, minimum ${minAmount})
+				</p>
+				<strong>$</strong> <input type="text" rv-value="payAmount" class="centered" size="4" placeholder="" />
+				<br /><br />
+				<button rv-on-click="purchase" class="btn primary">
+					<wr-icon src="#icon-cart"></wr-icon>
+					buy now
+				</button>
+			</div>
+			<div id="pro-activate">
+				<h2>activate</h2>
+				<p>
+					If you already have a license key, enter it in the field below.
+				</p>
+				<input type="text" rv-value="licenseKey" class="centered" size="" placeholder="" />
+				<br /><br />
+				<button rv-on-click="activate" class="btn">
+					<wr-icon src="#icon-check"></wr-icon>
+					activate
+				</button>
+			</div>
+		</div>
+		
+		<div class="paddle-promo">
+			Checkout experience powered by <a href="https://paddle.com/?ref=20635" target="_blank">Paddle</a>
+		</div>
+	</div>
+</template>
+<template id="wr-page-release-notes">
+	<h1>
+		<a rv-on-click="cancel" class="tool-btn" title="cancel" href="#"><wr-icon src="#icon-arrow-left" /></a>
+		release notes
+	</h1>
+
+	<h3>v 2.6.4 <span>(2020 . 03 . 28)</span></h3>
+	<div class="release-notes-section">
+		<ul>
+			<li><b>Minor</b> UI fixes &amp; tweaks</li>
+		</ul>
+	</div>
+
+	<h3>v 2.6.3 <span>(2019 . 04 . 15)</span></h3>
+	<div class="release-notes-section">
+		<ul>
+			<li><b>Fixed</b> a problem with always showing the resize tooltip caused by a new bug in the Chrome permissions API.</li>
+		</ul>
+	</div>
+
+	<h3>v 2.6.2 <span>(2019 . 03 . 14)</span></h3>
+	<div class="release-notes-section">
+		<ul>
+			<li><b>Fixed</b> console error generated by the use of the deprecated HTML imports in the resize tooltip.</li>
+			<li><b>Fixed</b> the main icon not updating when changing its style on the settings page.</li>
+			<li><b>Fixed</b> the look of the main drop-down by adding even padding all around the content.</li>
+		</ul>
+	</div>
+
+	<h3>v 2.6.1 <span>(2018 . 10 . 22)</span></h3>
+	<div class="release-notes-section">
+		<ul>
+			<li><b>Fixed</b> an issue with re-ordering the presets.</li>
+			<li><b>Modified</b> the settings page behaviour (it now opens as a full page).</li>
+			<li><b>Removed</b> a deprecation warning about `createShadowRoot`.</li>
+			<li><b>Fixed</b> some issues with accessibility audits & stuff...</li>
+		</ul>
+	</div>
+
+	<h3>v 2.6.0 <span>(2017 . 09 . 04)</span></h3>
+	<div class="release-notes-section">
+		<ul>
+			<li><b>Added</b> a new icon theme for the presets.</li>
+			<li><b>Added</b> a setting to display the description as the preset's title.</li>
+		</ul>
+	</div>
+
+	<h3>v 2.5.2 <span>(2017 . 09 . 04)</span></h3>
+	<div class="release-notes-section">
+		<ul>
+			<li><b>Added</b> a quick tip about hiding the popup sidebar.</li>
+			<li><b>Improved</b> error handling when re-sizing the window fails.</li>
+			<li><b>Added</b> an error log under "Settings > about" (visible only if there are any re-size errors).</li>
+		</ul>
+	</div>
+
+	<h3>v 2.5.1 <span>(2017 . 09 . 02)</span></h3>
+	<div class="release-notes-section">
+		<ul>
+			<li><b>Added</b> some finishing touches to the popup UI.</li>
+		</ul>
+	</div>
+
+	<h3>v 2.5.0 <span>(2017 . 09 . 02)</span></h3>
+	<div class="release-notes-section">
+		<ul>
+			<li><b>Added</b> a toggle to hide the popup's sidebar.</li>
+			<li><b>Added</b> a setting to hide the quick resize form displayed at the bottom of the popup.</li>
+		</ul>
+	</div>
+
+	<h3>v 2.4.0 <span>(2017 . 09 . 01)</span></h3>
+	<div class="release-notes-section">
+		<ul>
+			<li><b>Added</b> the option to reset the presets list to the default values.</li>
+			<li><b>Added</b> the option to delete all the presets at once and start clean.</li>
+		</ul>
+	</div>
+
+	<h3>v 2.3.1 <span>(2017 . 09 . 01)</span></h3>
+	<div class="release-notes-section">
+		<ul>
+			<li><b>Fixed</b> the popup menu cutting off at the top.</li>
+			<li><b>Fixed</b> the navigation when saving a preset not taking you back at the presets list.</li>
+		</ul>
+	</div>
+
+	<h3>v 2.3.0 <span>(2017 . 08 . 31)</span></h3>
+	<div class="release-notes-section">
+		<ul>
+			<li><b>Added</b> an option to disable settings synchronization.</li>
+		</ul>
+	</div>
+
+	<h3>v 2.2.1 <span>(2017 . 08 . 31)</span></h3>
+	<div class="release-notes-section">
+		<ul>
+			<li><b>Added</b> a button on the resize tooltip that takes the user directly to the tooltip's settings.</li>
+			<li><b>Modified</b> the resize tooltip so that, when set to automatically enabled, it will only appear only when resizing the window, not when loading a page.</li>
+			<li><b>Modified</b> the settings pages to make the top sub-menus more obvious.</li>
+		</ul>
+	</div>
+
+	<h3 id="v2.2.0">v 2.2.0 <span>(2017 . 08 . 30)</span></h3>
+	<div class="release-notes-section">
+		<strong>Version 2 is now out of Beta!</strong><br />
+		Notable features:
+		<ul>
+			<li>New UI (obiously)</li>
+			<li>A "rotate" button in the popup menu that swaps the viewport dimensions, from landscape to portrait mode and vice versa (Eg. a 960 x 640 viewport becomes 640 x 960)</li>
+			<li>A "popup" button which opens the current tab in a new popup window with minimal window borders, which alows it to be resized to very small dimensions</li>
+			<li>A button for quickly toggling the "resize tooltip" (that small box that displays the current window dimensions) on and off for the current page only</li>
+			<li>The "resize tooltip" can now be moved to any corner of the window by simply grabbing it by the icon and dragging to the desired location</li>
+			<li>The popup menu now displays a "quick resize" form that allows you to input custom width &amp; height values to quickly resize the window or viewport to custom dimensions</li>
+			<li>The extension's icon can now be customized in the settings (5 variants available) so that is better matches your current Chrome theme</li>
+			<li>No more intrusive default keyboard shortcuts (yay!)</li>
+			<li>Your settings are now automatically synced by Chrome to all your devices you are logged on to</li>
+		</ul>
+		Also, you can now support further development of this extension by purchasing a "Pro" license. This doesn't give you anything extra (at least for now) but the satisfaction
+		that you contributed to the development of a tool you (hopefully) enjoy using and makes your life easier.
+		<br />
+		You can consider this a donation, with the added benefit that you receive an invoice for your payment, so companies can deduct this as an expense.
+
+		<div class="stand-out">
+			<button data-hash="#pro" rv-on-click="goTo" class="btn primary">I want to show my support</button>
+		</div>
+	</div>
+
+	<h3>v 2.1.1 <span>(2017 . 06 . 08)</span></h3>
+	<div class="release-notes-section">
+		<ul>
+			<li><b>Fixed</b> a problem with the resize tooltip crashing some tabs when set to automatically display on all pages.</li>
+		</ul>
+	</div>
+
+	<h3>v 2.1.0 <span>(2016 . 11 . 13)</span></h3>
+	<div class="release-notes-section">
+		<ul>
+			<li><b>Added</b> the ability to change the position of the resize tooltip by simply dragging it to another corner.</li>
+			<li><b>Updated</b> the browser menu icons sizes and styles to better match the new Chrome UI.</li>
+		</ul>
+	</div>
+
+	<h3>v 2.0.5 <span>(2016 . 08 . 23)</span></h3>
+	<div class="release-notes-section">
+		<ul>
+			<li><b>Removed</b> the popup banner for the beta users.</li>
+		</ul>
+	</div>
+
+	<h3>v 2.0.4 <span>(2016 . 05 . 05)</span></h3>
+	<div class="release-notes-section">
+		<ul>
+			<li><b>Added</b> an option to alternate the background color in the presets list (zebra stripes)<br />(located under <em>settings &raquo; popup</em>)</li>
+			<li><b>Removed</b> the <em>notifications</em> permission request (left-over from testing)</li>
+			<li><b>Removed</b> the default <em>centered</em> position for one of the presets (left-over from testing)</li>
+			<li>Changed the way the ads are displayed and some more code cleanup</li>
+		</ul>
+	</div>
+
+	<h3>v 2.0.3 <span>(2016 . 03 . 30)</span></h3>
+	<div class="release-notes-section">
+		<ul>
+			<li><b>Added</b> an option to auto-close the popup after clicking on a preset <br />(located under <em>settings &raquo; popup</em>)</li>
+			<li>
+				<b>Added</b> an option to keep the window left-aligned when re-sizing, just like in the old version, where the
+				window's left edge stays in the same position <br />(located under <em>settings &raquo; other</em>)
+			</li>
+			<li>
+				<b>Fixed</b> the tooltip flickering by changing the way the re-size tooltip is automatically added to the pages.
+				The previously used Chrome API would trigger the display of the tooltip every time a resource (like an iframe)
+				was reloaded, causing problems on sites like Google Docs.
+			</li>
+			<li>
+				<b>Fixed</b> a bug that was overwriting the icon style when the extension was updated.
+			</li>
+			<li>
+				...other internal fine-tunning.
+			</li>
+		</ul>
+	</div>
+
+	<h3>v 2.0.2 <span>(2016 . 03 . 16)</span></h3>
+	<div class="release-notes-section">
+		<ul>
+			<li>Fixed a problem with settings sometimes not being saved.</li>
+			<li>Added a "use current" option when editing a preset's size.</li>
+			<li>Some small optimizations to the settings dialog function calls and event handlers.</li>
+		</ul>
+	</div>
+
+	<h3>v 2.0.1 <span>(2016 . 03 . 14)</span></h3>
+	<div class="release-notes-section">
+		<ul>
+			<li>Fixed "0" values for position not being saved.</li>
+			<li>Added a 3rd option for the icon, meant to be used with custom Chrome themes.</li>
+		</ul>
+	</div>
+
+	<h3>v 2.0.0 <span>(2016 . 03 . 10)</span></h3>
+	<div>
+		The beta release of the new version 2.
+	</div>
+</template>
+<template id="wr-page-settings">
+	<nav class="tab-nav">
+		<a rv-on-click="parent.handleNavigateToTab" class="popup" href="#tab-popup-settings">popup</a>
+		<a rv-on-click="parent.handleNavigateToTab" class="tooltip" href="#tab-tooltip-settings">tooltip</a>
+		<a rv-on-click="parent.handleNavigateToTab" class="other" href="#tab-other-settings">other</a>
+	</nav>
+
+	<div id="tab-popup-settings" class="tab-view">
+		<div class="setting-group">
+			<div class="label">Change the icon style</div>
+			<div class="input">
+				<select rv-value="settings.popupIconStyle">
+					<option value="dark+color">Dark + accent color (Default)</option>
+					<option value="dark">Dark</option>
+					<option value="neutral">Neutral</option>
+					<option value="light">Light</option>
+					<option value="light+color">Light + accent color</option>
+				</select>
+			</div>
+
+			<div class="note">
+				The light styles are recommended when using darker Chrome themes.
+			</div>
+		</div>
+
+		<div class="setting-group">
+			<div class="label">Hide the quick re-size form at the bottom of the popup menu</div>
+			<div class="input"><input rv-checked="settings.hideQuickResize" type="checkbox" class="toggle-control" /></div>
+		</div>
+
+		<div class="setting-group">
+			<div class="label">Change the icons style in the presets list</div>
+			<div class="input">
+				<select rv-value="settings.presetsIconsStyle">
+					<option value="clear">Clear</option>
+					<option value="square">Square</option>
+				</select>
+			</div>
+		</div>
+		
+		<div class="setting-group">
+			<div class="label">Primary line in presets listing</div>
+			<div class="input">
+				<select rv-value="settings.presetsPrimaryLine">
+					<option value="">Size</option>
+					<option value="description">Description</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="setting-group">
+			<div class="label">Hide the secondary line in presets listing</div>
+			<div class="input"><input rv-checked="settings.hidePresetsDescription" type="checkbox" class="toggle-control" /></div>
+			<div class="note">
+				By default, this is the description (unless changed by the "Primary line" setting).
+			</div>
+		</div>
+
+		<div class="setting-group">
+			<div class="label">Alternate presets' background color (zebra stripes)</div>
+			<div class="input"><input rv-checked="settings.alternatePresetsBg" type="checkbox" class="toggle-control" /></div>
+		</div>
+
+		<div class="setting-group">
+			<div class="label">Automatically close the popup after selecting a preset from the list</div>
+			<div class="input"><input rv-checked="settings.autoClosePopup" type="checkbox" class="toggle-control" /></div>
+		</div>
+
+		<div class="setting-group">
+			<div class="label">Hide the sidebar buttons' tooltips in the popup menu</div>
+			<div class="input"><input rv-checked="settings.hidePopupTooltips" type="checkbox" class="toggle-control" /></div>
+		</div>
+	</div>
+
+	<div id="tab-tooltip-settings" class="tab-view">
+		<div class="setting-group">
+			<div class="label">Automatically show the resize tooltip on all pages</div>
+			<div class="input"><input rv-checked="settings.alwaysShowTheTooltip" type="checkbox" class="toggle-control" /></div>
+
+			<div class="note">
+				Due to Chrome restrictions, the tooltip will only be visible on pages loaded using one of the
+				<code>http://</code>, <code>https://</code> or <code>file://</code> protocols.
+			</div>
+		</div>
+
+		<div class="setting-group">
+			<div class="label">Hide the resize tooltip after:</div>
+			<div class="input"><input rv-value="settings.hideTooltipDelay" class="centered" type="text" size="6" /> ms</div>
+		</div>
+	</div>
+
+	<div id="tab-other-settings" class="tab-view">
+		<div class="setting-group">
+			<div class="label">Always center the window</div>
+			<div class="input"><input rv-checked="settings.alwaysCenterTheWindow" type="checkbox" class="toggle-control" /></div>
+
+			<div class="note">
+				This will override any position settings you might have specified for your presets.
+			</div>
+		</div>
+
+		<div class="setting-group">
+			<div class="label">Keep window left-aligned when re-sizing</div>
+			<div class="input"><input rv-checked="settings.leftAlignWindow" type="checkbox" class="toggle-control" /></div>
+
+			<div class="note">
+				Use the old behavior, where the window's left edge stays in the same position
+			</div>
+		</div>
+	</div>
+</template>
+<template id="wr-page-sync">
+	<h1>sync</h1>
+
+	<div class="setting-group">
+		<div class="label">Synchronize my settings</div>
+		<div class="input"><input rv-checked="settings.syncSettings" type="checkbox" class="toggle-control" /></div>
+
+		<p class="note">
+			Your settings can be automatically synchronized between all your computers, as long as you're using the same Google account on all your Chrome instances.
+		</p>
+	</div>
+
+	<p>
+		You can use the form below to manually export/import settings for/from other users:
+	</p>
+
+	<textarea id="importExportField" spellcheck="false"></textarea>
+
+	<div class="stand-out stand-out--start">
+		<button rv-on-click="exportSettings" class="btn">export</button>
+		<button rv-on-click="importSettings" class="btn primary">import</button>
+	</div>
+
+</template>
+
+		<script src="../libs/rivets.bundled.js"></script>
+		<script src="../libs/ExtAPI.bundle.js"></script>
+		<script src="../libs/Sortable.min.js"></script>
+		<script src="../libs/tab-nav.js"></script>
+		<script src="../core/common.js"></script>
+		<script src="./settings.js"></script>
+	</body>
+</html>

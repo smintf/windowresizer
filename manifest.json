@@ -1,0 +1,98 @@
+{
+   "background": {
+      "scripts": [ "libs/ExtAPI.bundle.js", "scripts/background-process.js" ]
+   },
+   "browser_action": {
+      "default_icon": {
+         "16": "assets/icons/browser-icon-16.png",
+         "19": "assets/icons/browser-icon-19.png",
+         "32": "assets/icons/browser-icon-32.png",
+         "38": "assets/icons/browser-icon-38.png"
+      },
+      "default_popup": "views/popup.html"
+   },
+   "commands": {
+      "_execute_browser_action": {
+         "description": "Show popup",
+         "suggested_key": {
+            "default": "Alt+Shift+W"
+         }
+      },
+      "a-manual-tooltip-toggle": {
+         "description": "Toggle tooltip",
+         "suggested_key": {
+            "default": "Alt+Shift+T"
+         }
+      },
+      "b-rotate-viewport": {
+         "description": "Rotate the viewport",
+         "suggested_key": {
+            "default": "Alt+Shift+R"
+         }
+      },
+      "c-cycle-presets": {
+         "description": "Cycle presets",
+         "suggested_key": {
+            "default": "Alt+Shift+Down"
+         }
+      },
+      "d-cycle-presets-reverse": {
+         "description": "Cycle presets in reverse order"
+      },
+      "presets-01": {
+         "description": "Resize to preset  1"
+      },
+      "presets-02": {
+         "description": "Resize to preset  2"
+      },
+      "presets-03": {
+         "description": "Resize to preset  3"
+      },
+      "presets-04": {
+         "description": "Resize to preset  4"
+      },
+      "presets-05": {
+         "description": "Resize to preset  5"
+      },
+      "presets-06": {
+         "description": "Resize to preset  6"
+      },
+      "presets-07": {
+         "description": "Resize to preset  7"
+      },
+      "presets-08": {
+         "description": "Resize to preset  8"
+      },
+      "presets-09": {
+         "description": "Resize to preset  9"
+      },
+      "presets-10": {
+         "description": "Resize to preset 10"
+      }
+   },
+   "description": "Resize the browser window to emulate various screen resolutions.",
+   "differential_fingerprint": "1.ccc9e8d556d162fe9c9aca0a356ba6888a84b44642fdd0fd6311c28614baef2f",
+   "icons": {
+      "128": "assets/icons/icon-128.png",
+      "16": "assets/icons/icon-16.png",
+      "19": "assets/icons/icon-19.png",
+      "24": "assets/icons/icon-24.png",
+      "32": "assets/icons/icon-32.png",
+      "38": "assets/icons/icon-38.png",
+      "48": "assets/icons/icon-48.png",
+      "64": "assets/icons/icon-64.png",
+      "96": "assets/icons/icon-96.png"
+   },
+   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC1j9CcNzaUZzSixqKM8P9eoIg0AE0HObsg9E4IsPmOBRKEcplH423/WbJuhYWjskGgPRu5UJiVCBecrr/kzpIqUDC8LPDZTQmz6yLhL0KTZwLE5BbH4mdAi4WaaWhNW+zgk6B2wBQPObGQH9PqGlVcZrevytoAhea+6DFr+DnXnwIDAQAB",
+   "manifest_version": 2,
+   "minimum_chrome_version": "46",
+   "name": "Window Resizer",
+   "offline_enabled": true,
+   "optional_permissions": [ "tabs", "webNavigation", "\u003Call_urls>" ],
+   "options_page": "views/settings.html",
+   "permissions": [ "activeTab", "contextMenus", "storage" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "2.6.4.2101",
+   "version_name": "2.6.4",
+   "web_accessible_resources": [ "assets/tpl/resize-tooltip.css", "assets/tpl/resize-tooltip.html", "assets/fonts/lato-regular.ttf", "assets/fonts/lato-bold.ttf" ]
+}

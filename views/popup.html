@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Window Resizer</title>
+
+		<link rel="stylesheet" type="text/css" href="../assets/css/popup.css" />
+	</head>
+	<body id="popup-view"
+		rv-class-wr_modal_visible="currentMessage.status"
+		rv-class-alternate-presets-bg="alternatePresetsBg"
+		rv-class-hide-presets-description="hidePresetsDescription"
+		rv-class-hide-sidebar-tooltips="hidePopupTooltips"
+		rv-class-collapsed-sidebar="collapsedSidebar"
+		rv-class-hide-quick-resize="hideQuickResize"
+		rv-class-no-banner="currentBanner | Negate"
+
+		rv-data-icons="presetsIconsStyle"
+		rv-data-preset-title="presetsPrimaryLine"
+		>
+
+		<div id="wrapper">
+			<div id="errorMessage" rv-on-click="hideError" rv-class-visible="errorMessageTimeout">
+				<div>{errorMessage}</div>
+			</div>
+			<div id="sidebarToggle">
+				<button rv-on-click="toggleSidebar" tabindex="-1"></button>
+			</div>
+
+			<div id="quickTips" rv-show="showQuickTips">
+				<wr-icon id="sidebarToggleTip_Arrow" src="#icon-go"></wr-icon>
+				<wr-icon id="sidebarToggleQuickResize_Arrow" src="#icon-go"></wr-icon>
+
+				<div id="sidebarToggleTip_Message">
+					You can toggle the sidebar by clicking on this button.
+				</div>
+				
+				<div id="quickTips_Message">
+					<button rv-on-click="hideQuickTips" class="btn primary">OK, got it!</button>
+				</div>
+
+				<div id="sidebarToggleQuickResize_Message">
+					You can toggle the quick resize form from the settings page.
+				</div>
+			</div>
+
+			<div id="main" tabindex="1" rv-class-show-keys="showKeys" rv-on-blur="_hideKeys">
+
+				<div id="presets">
+					<div id="presetsPanel">
+						<wr-preset rv-on-click="handlePresetClick" rv-each-item="presets" preset="item" />
+					</div>
+				</div>
+
+				<div id="toolsPanel" rv-on-click="handleToolsClick">
+					<div id="tools">
+						<button data-key="R" data-tooltip="Rotate the viewport" rv-on-click="rotateViewport" tabindex="-1" class="icn-btn"><wr-icon src="#icon-rotate" /></button>
+						<button data-key="P" data-tooltip="Open as popup" rv-on-click="openAsPopup" tabindex="-1" class="icn-btn"><wr-icon src="#icon-popup" /></button>
+						<button data-key="T" data-tooltip="Toggle the resize tooltip" rv-on-click="toggleResizeInfo" tabindex="-1" class="icn-btn"><wr-icon src="#icon-resize-tooltip" /></button>
+					</div>
+					<div id="actions">
+						<button data-key="S" data-tooltip="Settings" rv-on-click="openSettings" tabindex="-1" class="icn-btn"><wr-icon src="#icon-settings" /></button>
+						<button data-key="H" data-tooltip="Help &amp; Support" rv-on-click="bugReport" tabindex="-1" class="icn-btn"><wr-icon src="#icon-help" /></button>
+					</div>
+				</div>
+			</div>
+
+			<div id="info">
+				<div id="promo" rv-show="currentBanner" rv-class-icon="currentBanner.icon">
+					<div rv-on-click="handleBannerClick" rv-data-url="currentBanner.url" rv-data-action="currentBanner.action" class="banner">
+						<div class="media" rv-show="currentBanner.image">
+							<img rv-src="currentBanner.image" />
+						</div>
+						<div class="media icon" rv-show="currentBanner.icon">
+							<wr-icon rv-src="currentBanner.icon" />
+						</div>
+						<div class="content" rv-html="currentBanner.caption"></div>
+					</div>
+
+					<button rv-on-click="hideBanner" tabindex="-1" class="close">&times;</button>
+				</div>
+			</div>
+
+			<form id="quickResize" rv-on-submit="quickResize">
+				<wr-numeric-input rv-deep-val="quick.width | IntOrNull" rv-class-empty="quick.width | Negate" placeholder="(current)" maxlength="4"></wr-numeric-input>
+				<span class="times">&times;</span>
+				<wr-numeric-input rv-deep-val="quick.height | IntOrNull" rv-class-empty="quick.height | Negate" placeholder="(current)" maxlength="4"></wr-numeric-input>
+
+				<label class="resize">
+					Resize<br />
+					<wr-status-toggle rv-deep-ischecked="quick.target | IntToBool" off="window" on="viewport"></wr-status-toggle>
+				</label>
+
+				<button type="submit" class="icn-btn"><wr-icon src="#icon-go" /></button>
+			</form>
+		</div>
+
+		<div class="WR_modal">
+			<div class="WR_modal_content">
+				<h3 class="WR_modal_title" rv-html="currentMessage.title"></h3>
+				<div class="WR_modal_message" rv-html="currentMessage.message"></div>
+				<div class="WR_modal_actions">
+					<button rv-each-action="currentMessage.actions" rv-on-click="action.handler" rv-class-main="action.main">
+						<wr-icon rv-src="action.icon" rv-show="action.icon"></wr-icon>
+						{action.title}
+					</button>
+				</div>
+			</div>
+		</div>
+
+		
+<template id="wr-icon">
+	<svg focusable="false" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 24 24">
+		<!-- use xlink:href=""></use -->
+	</svg>
+</template>
+
+<template id="wr-numeric-input">
+	<input type="text" rv-placeholder="placeholder" rv-maxlength="maxlength" rv-value="val" />
+</template>
+<template id="wr-preset">
+	<div>
+		<wr-icon class="icon" rv-src="preset.icon"></wr-icon>
+		<div class="content">
+			<div class="description" rv-html="preset.description"></div>
+			<div class="title" rv-html="preset.title"></div>
+		</div>
+		<content />
+	</div>
+</template>
+
+<template id="wr-status-toggle">
+	<input type="checkbox" rv-checked="ischecked" />
+	<div rv-on="on" rv-off="off"></div>
+</template>
+
+		<script src="../libs/rivets.bundled.js"></script>
+		<script src="../libs/ExtAPI.bundle.js"></script>
+		<script src="../libs/tab-nav.js"></script>
+		<script src="../core/common.js"></script>
+		<script src="./popup.js"></script>
+	</body>
+</html>

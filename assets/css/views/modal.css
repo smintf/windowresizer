@@ -1,0 +1,166 @@
+
+.wr_modal_visible #wrapper {
+	transition: -webkit-filter .15s ease;
+	-webkit-filter: blur(1px);
+}
+
+.wr_modal_visible .WR_modal {
+	transform: scale(1);
+	opacity: 1;
+	pointer-events: all;
+}
+
+.WR_modal {
+	position: fixed;
+	z-index: 99999;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: space-around;
+	background: rgba(0, 0, 0, .65);
+
+	font: normal 14px/1.5 Lato;
+
+	-webkit-user-select: auto;
+
+	transition: transform .15s ease, opacity .15s ease;
+	transform: scale(1.4);
+	opacity: 0;
+	pointer-events: none;
+}
+
+.WR_modal_content {
+	position: relative;
+	padding: 12px 24px 24px;
+	background: #fff;
+	color: #222;
+	/* max-height: 90%;
+	display: flex;
+	flex-flow: column; */
+
+	box-shadow: 0 0 4px 0 rgba(0, 0, 0, .65);
+}
+
+.WR_modal_content > * {
+	width: 100%;
+	max-width: 600px;
+	margin-left: auto !important;
+	margin-right: auto !important;
+}
+
+.WR_modal_title {
+	padding: 6px 0 12px;
+	margin: 0 0 18px;
+	font: normal 18px/1.5 Lato;
+	border-bottom: 1px solid #5ba741;
+}
+
+.WR_modal.danger .WR_modal_title {
+	border-color: #d42;
+}
+
+.WR_modal a {
+	color: #5ba741;
+	text-decoration: none;
+}
+
+.WR_modal a:focus {
+	outline: none;
+	border-bottom: 1px dotted #224b1e;
+}
+
+.WR_modal a:hover {
+	border-bottom: 1px solid #5ba741;
+}
+
+.WR_modal a:active {
+	color: #224b1e;
+}
+
+.WR_modal_message {
+	margin: 0;
+	padding: 0;
+	/* overflow: auto; */
+	/* flex: 1 1 auto; */
+}
+
+.WR_modal_actions {
+	text-align: right;
+	margin: 24px 0 0;
+}
+
+.WR_modal_actions:empty {
+	display: none;
+}
+
+.WR_modal button {
+	cursor: pointer;
+	background: #222;
+	color: #bbb;
+	border: 0;
+	margin: 0 0 0 12px;
+	padding: 12px;
+	font: normal 14px/16px Lato;
+	border-radius: 2px;
+	transition: transform .15s ease;
+}
+
+.WR_modal button:focus {
+	background: #333;
+	color: #ddd;
+	outline: none;
+}
+
+.WR_modal button:hover {
+	background: #333;
+	color: #fff;
+}
+
+.WR_modal button:active {
+	background: #333;
+	color: #fff;
+	transform: scale(.96);
+}
+
+.WR_modal button.main {
+	background: #5ba741;
+	color: #edf4d7;
+}
+
+.WR_modal button.main:focus {
+	background: #77c35a;
+}
+
+.WR_modal button.main:hover {
+	background: #77c35a;
+	color: #fff;
+}
+
+.WR_modal.danger button.main {
+	background: #d42;
+	color: #fdd;
+}
+
+.WR_modal.danger button.main:focus {
+	background: #e42;
+}
+
+.WR_modal.danger button.main:hover {
+	background: #e42;
+	color: #fff;
+}
+
+.WR_modal button wr-icon {
+	fill: #bbb;
+	width: 16px;
+	height: 16px;
+	vertical-align: middle;
+	margin: 0 4px 0 0;
+}
+
+.WR_modal button.main wr-icon {
+	fill: #edf4d7;
+}

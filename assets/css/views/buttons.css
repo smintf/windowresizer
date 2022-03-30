@@ -1,0 +1,50 @@
+.btn {
+    cursor: pointer;
+    background: #333;
+    color: #ddd;
+    border: 0;
+    margin: 0 0 0 12px;
+    padding: 12px;
+    font: normal 14px Lato;
+    border-radius: 2px;
+    transition: transform .15s ease;
+}
+
+.btn:focus {
+    background: #444;
+    color: #ddd;
+    outline: none;
+}
+
+.btn:hover {
+    background: #444;
+    color: #fff;
+}
+
+.btn:active {
+    background: #444;
+    color: #fff;
+    transform: scale(.96);
+}
+
+.btn.primary {
+    background: #5ba741;
+    color: #edf4d7;
+}
+
+.btn.primary:focus {
+    background: #77c35a;
+}
+
+.btn.primary:hover {
+    background: #77c35a;
+    color: #fff;
+}
+
+.btn wr-icon {
+    fill: #ddd;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin: 0 4px 0 0;
+}

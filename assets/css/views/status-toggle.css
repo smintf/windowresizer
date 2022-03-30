@@ -1,0 +1,65 @@
+wr-status-toggle {
+	position: relative;
+	background: #333;
+	display: inline-block;
+	height: 24px;
+	color: #fff;
+	font-weight: normal;
+	font-size: 13px;
+	line-height: 26px;
+	box-sizing: border-box;
+	overflow: hidden;
+	cursor: pointer;
+	border-radius: 2px;
+}
+
+wr-status-toggle > input {
+	position: absolute;
+	z-index: 10;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	top: 0;
+	left: 0;
+	opacity: 0;
+	background: #f09;
+	cursor: inherit;
+}
+
+wr-status-toggle > div {
+	position: relative;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+}
+
+wr-status-toggle > div:before,
+wr-status-toggle > div:after {
+	position: relative;
+	z-index: 1;
+	top: 0%;
+	height: 100%;
+	padding: 0 ;
+	box-sizing: border-box;
+	display: block;
+	text-align: center;
+	overflow: hidden;
+	transition: all .15s ease;
+}
+
+wr-status-toggle > :checked + div:before,
+wr-status-toggle > :checked + div:after {
+	top: -100%;
+}
+
+wr-status-toggle > div:before {
+	content: attr(off);
+}
+
+wr-status-toggle > div:after {
+	content: attr(on);
+}
